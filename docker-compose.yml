@@ -1,0 +1,37 @@
+networks:
+  localdev:
+    name: localdev
+    external: true
+
+services:
+  proxy:
+    image: nginxproxy/nginx-proxy
+    networks: [ localdev ]
+    container_name: proxy
+    restart: on-failure
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    networks: [ localdev ]
+    restart: on-failure
+    ports:
+      - "9999:8080"
+    environment:
+      VIRTUAL_HOST: adminer.docker
+      VIRTUAL_PORT: 8080
+#
+#  dbeaver:
+#    image: dd
+#    networks: [ localdev ]
+#    container_name: dbeaver
+#    restart: on-failure
+#    ports:
+#      - "8978:8080"
+#    environment:
+#      VIRTUAL_HOST: dbeaver.docker
+#      VIRTUAL_PORT: 8080
